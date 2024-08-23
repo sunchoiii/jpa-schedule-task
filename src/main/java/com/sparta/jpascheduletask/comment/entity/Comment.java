@@ -1,8 +1,9 @@
-package com.sparta.jpascheduletask.schedule.entity;
+package com.sparta.jpascheduletask.comment.entity;
 
-import com.sparta.jpascheduletask.comment.entity.Comment;
-import com.sparta.jpascheduletask.schedule.dto.ScheduleRequestDto;
+import com.sparta.jpascheduletask.comment.dto.CommentRequestDto;
+import com.sparta.jpascheduletask.schedule.entity.Schedule;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,24 +12,21 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 
 @Getter
 @Setter
+@Entity
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
-@Table(name = "schedule")
-@Entity
-public class Schedule {
+@AllArgsConstructor
+@Table(name = "comment")
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long schedule_id;
+    private Long comment_id;
 
     private String username;
-    private String title;
     private String contents;
 
     @CreatedDate
@@ -41,20 +39,21 @@ public class Schedule {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updateDate;
 
+    //일정 하나에 댓글 여려개를 달 수 있다
     //일정 1 : 댓글 N
-    @OneToMany(mappedBy = "schedule")
-    private List<Comment> comments = new ArrayList<>();
+    //근데 1: N 관계에서는 양방향 관계가 없음 아니! 할수있음
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "schedule_id")
+    private Schedule schedule;
 
 
-    public Schedule(ScheduleRequestDto requestDto) {
-        this.username = requestDto.getUsername();
-        this.title = requestDto.getTitle();
+    public Comment(CommentRequestDto requestDto) {
+        this.username= requestDto.getUsername();
         this.contents = requestDto.getContents();
     }
 
-    public void update(ScheduleRequestDto requestDto) {
+    public void update(CommentRequestDto requestDto) {
         this.username = requestDto.getUsername();
-        this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
     }
 }

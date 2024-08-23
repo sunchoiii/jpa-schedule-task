@@ -28,7 +28,7 @@ public class ScheduleService {
     // 일정 단건 조회
     public Schedule findById(Long schedule_id) {
         return scheduleRepository.findById(String.valueOf(schedule_id)).orElseThrow(() ->
-                new IllegalArgumentException("선택한 메모는 존재하지 않습니다.")
+                new IllegalArgumentException("선택한 일정은 존재하지 않습니다.")
         );
     }
 

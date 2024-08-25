@@ -5,8 +5,14 @@ import com.sparta.jpascheduletask.schedule.dto.ScheduleRequestDto;
 import com.sparta.jpascheduletask.schedule.entity.Schedule;
 import com.sparta.jpascheduletask.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +38,12 @@ public class ScheduleService {
         );
     }
 
+    //페이징 활용해서 페이지네이션 구현
+    public Page<ScheduleReponseDto> findAll(Pageable pageable) {
+        // Schedule 엔터티 리스트를 ScheduleResponseDto 리스트로 변환하여 반환
+        return scheduleRepository.findAll(pageable).map(ScheduleReponseDto::new);
+    }
+
     // 일정 수정
     @Transactional
     public ScheduleReponseDto update(Long schedule_id, ScheduleRequestDto requestDto) {
@@ -44,9 +56,5 @@ public class ScheduleService {
         return scheduleReponseDto;
 
     }
-
-
-
-
 
 }

@@ -26,17 +26,17 @@ public class ManyToOneTest {
     void test4() {
         Schedule schedule = new Schedule();
         schedule.setUsername("choisun");
-        schedule.setTitle("댓글 연관 확인");
-        schedule.setContents("할수있어");
+        schedule.setTitle("댓글 연관 확인22");
+        schedule.setContents("과제");
 
         Comment comment = new Comment();
-        comment.setUsername("김땡땡");
+        comment.setUsername("김땡");
         comment.setContents("될까");
         comment.setSchedule(schedule); // 외래 키(연관 관계) 설정
 
         Comment comment2 = new Comment();
-        comment2.setUsername("박뭐시기");
-        comment2.setContents("되나?");
+        comment2.setUsername("박뭐");
+        comment2.setContents("돤디");
         comment2.setSchedule(schedule); // 외래 키(연관 관계) 설정
 
         scheduleRepository.save(schedule);

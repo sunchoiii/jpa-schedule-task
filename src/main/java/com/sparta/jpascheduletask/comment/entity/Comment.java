@@ -41,7 +41,6 @@ public class Comment {
 
     //일정 하나에 댓글 여려개를 달 수 있다
     //일정 1 : 댓글 N
-    //근데 1: N 관계에서는 양방향 관계가 없음 아니! 할수있음
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;

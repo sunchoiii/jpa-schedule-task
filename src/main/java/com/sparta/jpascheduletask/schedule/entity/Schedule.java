@@ -42,7 +42,8 @@ public class Schedule {
     private LocalDateTime updateDate;
 
     //일정 1 : 댓글 N
-    @OneToMany(mappedBy = "schedule")
+    //일정을 삭제할 때 일정의 댓글도 함께 삭제
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
 

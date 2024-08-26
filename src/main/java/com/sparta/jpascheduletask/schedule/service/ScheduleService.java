@@ -57,4 +57,10 @@ public class ScheduleService {
 
     }
 
+    // 일정 삭제 시 댓글도 함께 삭제
+    public String deleteSchedule(Long schedule_id) {
+        Schedule schedule = findById(schedule_id);
+        scheduleRepository.delete(schedule);
+        return "해당 일정이 삭제되었습니다.";
+    }
 }

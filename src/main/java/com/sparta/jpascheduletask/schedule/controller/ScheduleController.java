@@ -45,4 +45,10 @@ public class ScheduleController {
         return scheduleService.update(schedule_id, requestDto);
     }
 
+    // 일정 삭제 시 댓글도 함께 삭제
+    @DeleteMapping("/schedule/{schedule_id}")
+    public String deleteSchedule(@PathVariable Long schedule_id) {
+        return scheduleService.deleteSchedule(schedule_id);
+    }
+
 }

@@ -54,7 +54,6 @@ public class CommentService {
     public String delete(Long comment_id) {
         //해당 아이디의 댓글이 있는지 확인
         Comment comment = findByID(comment_id);
-
         commentRepository.delete(comment);
 
         return "해당 댓글이 삭제되었습니다";

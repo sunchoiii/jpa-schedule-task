@@ -25,7 +25,6 @@ public class ManyToOneTest {
     @DisplayName("N대1 양방향 테스트")
     void test4() {
         Schedule schedule = new Schedule();
-        schedule.setUsername("choisun");
         schedule.setTitle("댓글 연관 확인22");
         schedule.setContents("과제");
 

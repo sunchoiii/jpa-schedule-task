@@ -2,7 +2,6 @@ package com.sparta.jpascheduletask.schedule.controller;
 
 import com.sparta.jpascheduletask.schedule.dto.ScheduleReponseDto;
 import com.sparta.jpascheduletask.schedule.dto.ScheduleRequestDto;
-import com.sparta.jpascheduletask.schedule.entity.Schedule;
 import com.sparta.jpascheduletask.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,8 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -27,9 +24,10 @@ public class ScheduleController {
     }
 
     // 일정 단건 조회 (일정 아이디로 조회)
+    // 일정 단건 조회 시 담당 유저들의 고유 식별자, 유저명, 이메일  포함(JPA의 지연 로딩 기능)
     @GetMapping("/schedule/{schedule_id}")
-    public Schedule findById(@PathVariable Long schedule_id) {
-        return scheduleService.findById(schedule_id);
+    public ScheduleReponseDto findById(@PathVariable Long schedule_id) {
+        return scheduleService.findByIdPlusUser(schedule_id);
     }
 
     // 일정을 Spring Data JPA의 Pageable과 Page 인터페이스를 활용하여 페이지네이션을 구현

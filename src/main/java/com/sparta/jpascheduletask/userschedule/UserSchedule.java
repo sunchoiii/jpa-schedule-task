@@ -3,25 +3,28 @@ package com.sparta.jpascheduletask.userschedule;
 import com.sparta.jpascheduletask.schedule.entity.Schedule;
 import com.sparta.jpascheduletask.user.entity.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "userschedule")
 public class UserSchedule {
-    // 일정 N : 유저 M 관계 - 중간테이블 UserSchedule
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
-    @ManyToOne
+    // 일정 단건 조회 시 담당 유저들의 고유 식별자, 유저명, 이메일  포함 (JPA의 지연 로딩 기능)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

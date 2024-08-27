@@ -13,6 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Transactional
 @SpringBootTest
@@ -82,34 +85,36 @@ public class UserScheduleTest {
         schedule2.setTitle("축구");
         schedule2.setContents("확인");
 
+        List<UserSchedule> userSchedules = new ArrayList<>();
         UserSchedule userSchedule1 = new UserSchedule();
         userSchedule1.setUser(user);
         userSchedule1.setSchedule(schedule);
         userSchedule1.setRole("작성자");
+        userSchedules.add(userSchedule1);
 
         UserSchedule userSchedule2 = new UserSchedule();
         userSchedule2.setUser(user);
         userSchedule2.setSchedule(schedule);
         userSchedule2.setRole("담당자");
+        userSchedules.add(userSchedule2);
 
         UserSchedule userSchedule3 = new UserSchedule();
         userSchedule3.setUser(user2);
         userSchedule3.setSchedule(schedule);
         userSchedule3.setRole("담당자");
+        userSchedules.add(userSchedule3);
 
         UserSchedule userSchedule4 = new UserSchedule();
         userSchedule4.setUser(user2);
         userSchedule4.setSchedule(schedule2);
         userSchedule4.setRole("작성자");
+        userSchedules.add(userSchedule4);
 
         userRepository.save(user);
         userRepository.save(user2);
         scheduleRepository.save(schedule);
         scheduleRepository.save(schedule2);
-        userScheduleRepository.save(userSchedule1);
-        userScheduleRepository.save(userSchedule2);
-        userScheduleRepository.save(userSchedule3);
-        userScheduleRepository.save(userSchedule4);
+        userScheduleRepository.saveAll(userSchedules);
 
     }
 

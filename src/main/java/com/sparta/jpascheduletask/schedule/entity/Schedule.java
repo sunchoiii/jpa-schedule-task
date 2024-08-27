@@ -1,8 +1,8 @@
 package com.sparta.jpascheduletask.schedule.entity;
 
-import com.sparta.jpascheduletask.userschedule.UserSchedule;
 import com.sparta.jpascheduletask.comment.entity.Comment;
 import com.sparta.jpascheduletask.schedule.dto.ScheduleRequestDto;
+import com.sparta.jpascheduletask.userschedule.UserSchedule;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

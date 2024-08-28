@@ -13,12 +13,24 @@ public class UserResponseDto {
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
 
+    private String token;
+
     public UserResponseDto(User user) {
         this.user_id = user.getUser_id();
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.createDate = user.getCreateDate();
         this.updateDate = user.getUpdateDate();
+
+    }
+
+    public UserResponseDto(User user, String token) {
+        this.user_id = user.getUser_id();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.createDate = user.getCreateDate();
+        this.updateDate = user.getUpdateDate();
+        this.token = token;
 
     }
 }

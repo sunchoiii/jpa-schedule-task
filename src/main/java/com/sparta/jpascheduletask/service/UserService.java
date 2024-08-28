@@ -4,8 +4,9 @@ import com.sparta.jpascheduletask.config.PasswordEncoder;
 import com.sparta.jpascheduletask.dto.UserRequestDto;
 import com.sparta.jpascheduletask.dto.UserResponseDto;
 import com.sparta.jpascheduletask.entity.User;
+import com.sparta.jpascheduletask.jwt.JwtUtil;
 import com.sparta.jpascheduletask.repository.UserRepository;
-import com.sparta.jpascheduletask.repository.UserScheduleRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +19,13 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserScheduleRepository userScheduleRepository;
+
     private final PasswordEncoder passwordEncoder;
 
+    private final JwtUtil jwtUtil;
+
     //회원가입
-    public UserResponseDto signup(UserRequestDto requestDto) {
+    public UserResponseDto signup(UserRequestDto requestDto, HttpServletResponse res) {
         String username = requestDto.getUsername();
         String email = requestDto.getEmail();
         String password = passwordEncoder.encode(requestDto.getPassword());
@@ -41,7 +44,12 @@ public class UserService {
 
         User user = new User(username, password, email);
         userRepository.save(user);
-        UserResponseDto responseDto = new UserResponseDto(user);
+
+        // JWT 생성 및 쿠키 저장 후 Response 객체에 추가
+        String token = jwtUtil.createToken(user.getUsername());
+        jwtUtil.addJwtToCookie(token, res);
+
+        UserResponseDto responseDto = new UserResponseDto(user, token);
         return responseDto;
     }
 

@@ -4,6 +4,7 @@ import com.sparta.jpascheduletask.dto.UserRequestDto;
 import com.sparta.jpascheduletask.dto.UserResponseDto;
 import com.sparta.jpascheduletask.entity.User;
 import com.sparta.jpascheduletask.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +19,8 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/user")
-    public UserResponseDto signup(@RequestBody UserRequestDto requestDto) {
-        return userService.signup(requestDto);
+    public UserResponseDto signup(@RequestBody UserRequestDto requestDto, HttpServletResponse res) {
+        return userService.signup(requestDto, res);
     }
 
     //유저 단건 조회

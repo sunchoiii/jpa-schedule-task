@@ -1,5 +1,6 @@
 package com.sparta.jpascheduletask.controller;
 
+import com.sparta.jpascheduletask.dto.LoginRequestDto;
 import com.sparta.jpascheduletask.dto.UserRequestDto;
 import com.sparta.jpascheduletask.dto.UserResponseDto;
 import com.sparta.jpascheduletask.entity.User;
@@ -18,9 +19,15 @@ public class UserController {
     private final UserService userService;
 
     // 회원가입
-    @PostMapping("/user")
+    @PostMapping("/user/signup")
     public UserResponseDto signup(@RequestBody UserRequestDto requestDto, HttpServletResponse res) {
         return userService.signup(requestDto, res);
+    }
+
+    //로그인
+    @PostMapping("/user/login")
+    public UserResponseDto login (@RequestBody LoginRequestDto requestDto, HttpServletResponse res) {
+        return userService.login(requestDto, res);
     }
 
     //유저 단건 조회

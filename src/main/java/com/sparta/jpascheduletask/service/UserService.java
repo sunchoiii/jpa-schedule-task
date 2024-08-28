@@ -1,6 +1,7 @@
 package com.sparta.jpascheduletask.service;
 
 import com.sparta.jpascheduletask.config.PasswordEncoder;
+import com.sparta.jpascheduletask.dto.LoginRequestDto;
 import com.sparta.jpascheduletask.dto.UserRequestDto;
 import com.sparta.jpascheduletask.dto.UserResponseDto;
 import com.sparta.jpascheduletask.entity.User;
@@ -49,9 +50,33 @@ public class UserService {
         String token = jwtUtil.createToken(user.getUsername());
         jwtUtil.addJwtToCookie(token, res);
 
-        UserResponseDto responseDto = new UserResponseDto(user, token);
+        UserResponseDto responseDto = new UserResponseDto(user);
         return responseDto;
     }
+
+    // 로그인
+    public UserResponseDto login(LoginRequestDto requestDto, HttpServletResponse res) {
+        String email = requestDto.getEmail();
+        String password = requestDto.getPassword();
+
+        //사용자 확인
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalArgumentException("등록된 이메일이 없습니다.")
+        );
+
+        //비밀번호 확인
+        if (! passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // JWT 생성 및 쿠키 저장 후 Response 객체에 추가
+        String token = jwtUtil.createToken(user.getEmail());
+        jwtUtil.addJwtToCookie(token, res);
+
+        UserResponseDto responseDto = new UserResponseDto(user);
+        return responseDto;
+    }
+
 
     public User findById(Long user_id) {
         return userRepository.findById(user_id).orElseThrow(() ->

@@ -1,9 +1,9 @@
 package com.sparta.jpascheduletask;
 
-import com.sparta.jpascheduletask.comment.entity.Comment;
-import com.sparta.jpascheduletask.comment.repository.CommentRepository;
-import com.sparta.jpascheduletask.schedule.entity.Schedule;
-import com.sparta.jpascheduletask.schedule.repository.ScheduleRepository;
+import com.sparta.jpascheduletask.entity.Comment;
+import com.sparta.jpascheduletask.repository.CommentRepository;
+import com.sparta.jpascheduletask.entity.Schedule;
+import com.sparta.jpascheduletask.repository.ScheduleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

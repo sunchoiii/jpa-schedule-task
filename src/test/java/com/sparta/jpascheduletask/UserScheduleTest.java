@@ -1,11 +1,11 @@
 package com.sparta.jpascheduletask;
 
-import com.sparta.jpascheduletask.schedule.entity.Schedule;
-import com.sparta.jpascheduletask.schedule.repository.ScheduleRepository;
-import com.sparta.jpascheduletask.user.entity.User;
-import com.sparta.jpascheduletask.user.repository.UserRepository;
-import com.sparta.jpascheduletask.userschedule.UserSchedule;
-import com.sparta.jpascheduletask.userschedule.UserScheduleRepository;
+import com.sparta.jpascheduletask.entity.Schedule;
+import com.sparta.jpascheduletask.repository.ScheduleRepository;
+import com.sparta.jpascheduletask.entity.User;
+import com.sparta.jpascheduletask.repository.UserRepository;
+import com.sparta.jpascheduletask.entity.UserSchedule;
+import com.sparta.jpascheduletask.repository.UserScheduleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,7 @@ public class UserScheduleTest {
         User user = new User();
         user.setUsername("sun");
         user.setEmail("google.com");
+        user.setPassword("1234");
 
         Schedule schedule = new Schedule();
         schedule.setTitle("중간테이블");

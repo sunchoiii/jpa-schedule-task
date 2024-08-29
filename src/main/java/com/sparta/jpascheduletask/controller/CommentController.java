@@ -24,14 +24,14 @@ public class CommentController {
 
     // 댓글 단건 조회
     @GetMapping("/comment/{comment_id}")
-    public Comment findByID (@PathVariable Long comment_id) {
-        return commentService.findByID(comment_id);
+    public CommentResponseDto findById (@PathVariable Long comment_id) {
+        return commentService.findById(comment_id);
     }
 
     // 댓글 전체 조회
-    @GetMapping("/comment")
-    public List<CommentResponseDto> findAll() {
-        return commentService.findAll();
+    @GetMapping("/comment/list")
+    public List<CommentResponseDto> findCommentList() {
+        return commentService.findCommentList();
     }
 
     // 댓글 수정 (아이디 확인 후 작성자명, 댓글 내용 수정)

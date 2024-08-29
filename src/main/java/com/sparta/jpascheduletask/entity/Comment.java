@@ -1,6 +1,7 @@
 package com.sparta.jpascheduletask.entity;
 
 import com.sparta.jpascheduletask.dto.CommentRequestDto;
+import com.sparta.jpascheduletask.dto.CommentResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

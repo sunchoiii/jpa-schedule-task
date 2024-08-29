@@ -32,14 +32,14 @@ public class UserController {
 
     //유저 단건 조회
     @GetMapping("/user/{user_id}")
-    public User findById(@PathVariable Long user_id) {
+    public UserResponseDto findById(@PathVariable Long user_id) {
         return userService.findById(user_id);
     }
 
     // 유저 전체 조회
-    @GetMapping("/user")
-    public List<UserResponseDto> findAll() {
-        return userService.findAll();
+    @GetMapping("/user/list")
+    public List<UserResponseDto> findUserList() {
+        return userService.findUserList();
     }
 
     // 유저 수정

@@ -17,24 +17,25 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     // 댓글 저장
+    @Transactional
     public CommentResponseDto createComment(CommentRequestDto requestDto) {
         Comment comment = new Comment(requestDto);
-
-        Comment saveComment = commentRepository.save(comment);
-
-        CommentResponseDto responseDto = new CommentResponseDto(comment);
-        return responseDto;
+        commentRepository.save(comment);
+        return new CommentResponseDto(comment);
     }
 
     // 댓글 단건 조회
-    public Comment findByID(Long comment_id) {
-        return commentRepository.findById(comment_id).orElseThrow(() ->
+    @Transactional(readOnly = true)
+    public CommentResponseDto findById(Long comment_id) {
+        Comment comment = commentRepository.findById(comment_id).orElseThrow(() ->
                 new IllegalArgumentException("선택한 댓글은 존재하지 않습니다.")
         );
+        return new CommentResponseDto(comment);
     }
 
     // 댓글 전체 조회
-    public List<CommentResponseDto> findAll() {
+    @Transactional(readOnly = true)
+    public List<CommentResponseDto> findCommentList() {
         return commentRepository.findAll().stream().map(CommentResponseDto::new).toList();
     }
 
@@ -42,24 +43,22 @@ public class CommentService {
     @Transactional
     public CommentResponseDto update(Long comment_id, CommentRequestDto requestDto) {
         //해당 아이디의 댓글이 있는지 확인
-        Comment comment = findByID(comment_id);
-
+        Comment comment = commentRepository.findById(comment_id).orElseThrow(() ->
+                new IllegalArgumentException("선택한 댓글은 존재하지 않습니다.")
+        );
         comment.update(requestDto);
-
-        CommentResponseDto responseDto = new CommentResponseDto(comment);
-        return responseDto;
+        return new CommentResponseDto(comment);
     }
 
     // 댓글 삭제
+    @Transactional
     public String delete(Long comment_id) {
         //해당 아이디의 댓글이 있는지 확인
-        Comment comment = findByID(comment_id);
+        Comment comment = commentRepository.findById(comment_id).orElseThrow(() ->
+                new IllegalArgumentException("선택한 댓글은 존재하지 않습니다.")
+        );
         commentRepository.delete(comment);
-
         return "해당 댓글이 삭제되었습니다";
 
     }
-
-
-
 }

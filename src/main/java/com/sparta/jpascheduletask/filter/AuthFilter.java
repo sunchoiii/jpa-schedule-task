@@ -35,7 +35,6 @@ public class AuthFilter implements Filter {
                 (url.startsWith("/api/user/signup") || url.startsWith("/api/user/login") )) {
             // 회원가입, 로그인 관련 API 는 인증 필요없이 요청 진행
             chain.doFilter(request, response); // 다음 Filter 로 이동
-            log.info("인증처리를 하지 않는 URL : " + url);
         } else {
             // 나머지 API 요청은 인증 처리 진행
             // 토큰 확인
@@ -60,7 +59,6 @@ public class AuthFilter implements Filter {
                 // 컨트롤러로 보냄
                 request.setAttribute("user", user);
                 chain.doFilter(request, response); // 다음 Filter 로 이동
-                log.info("인증처리 완료한 url : " + url);
             } else {
                 throw new IllegalArgumentException("Not Found Token");
             }

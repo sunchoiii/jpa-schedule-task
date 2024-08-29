@@ -9,8 +9,10 @@ import com.sparta.jpascheduletask.jwt.JwtUtil;
 import com.sparta.jpascheduletask.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,14 +61,14 @@ public class UserService {
         String email = requestDto.getEmail();
         String password = requestDto.getPassword();
 
-        //사용자 확인
+        //사용자 확인 -> 일치하지 않으면 401 에러 반환
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("등록된 이메일이 없습니다.")
+                () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "이메일이 일치하지 않습니다.")
         );
 
-        //비밀번호 확인
+        //비밀번호 확인 -> 일치하지 않으면 401 에러 반환
         if (! passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
 
         // JWT 생성 및 쿠키 저장 후 Response 객체에 추가

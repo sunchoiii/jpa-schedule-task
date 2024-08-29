@@ -5,6 +5,7 @@ import com.sparta.jpascheduletask.dto.LoginRequestDto;
 import com.sparta.jpascheduletask.dto.UserRequestDto;
 import com.sparta.jpascheduletask.dto.UserResponseDto;
 import com.sparta.jpascheduletask.entity.User;
+import com.sparta.jpascheduletask.entity.UserRoleEnum;
 import com.sparta.jpascheduletask.jwt.JwtUtil;
 import com.sparta.jpascheduletask.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -27,7 +29,11 @@ public class UserService {
 
     private final JwtUtil jwtUtil;
 
+    // ADMIN_TOKEN
+    private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
+
     //회원가입
+    @Transactional
     public UserResponseDto signup(UserRequestDto requestDto, HttpServletResponse res) {
         String username = requestDto.getUsername();
         String email = requestDto.getEmail();
@@ -45,18 +51,27 @@ public class UserService {
             throw new IllegalArgumentException("중복된 Email 입니다.");
         }
 
-        User user = new User(username, password, email);
+        // 사용자 ROLE 확인
+        UserRoleEnum role = UserRoleEnum.USER;
+        if (requestDto.isAdmin()) {
+            if (!ADMIN_TOKEN.equals(requestDto.getAdminToken())) {
+                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+            }
+            role = UserRoleEnum.ADMIN;
+        }
+
+        User user = new User(username, password, email, role);
         userRepository.save(user);
 
         // JWT 생성 및 쿠키 저장 후 Response 객체에 추가
-        String token = jwtUtil.createToken(user.getUsername());
+        String token = jwtUtil.createToken(user.getUsername(), user.getRole());
         jwtUtil.addJwtToCookie(token, res);
 
-        UserResponseDto responseDto = new UserResponseDto(user);
-        return responseDto;
+        return new UserResponseDto(user);
     }
 
     // 로그인
+    @Transactional
     public UserResponseDto login(LoginRequestDto requestDto, HttpServletResponse res) {
         String email = requestDto.getEmail();
         String password = requestDto.getPassword();
@@ -72,33 +87,37 @@ public class UserService {
         }
 
         // JWT 생성 및 쿠키 저장 후 Response 객체에 추가
-        String token = jwtUtil.createToken(user.getEmail());
+        String token = jwtUtil.createToken(user.getUsername(), user.getRole());
         jwtUtil.addJwtToCookie(token, res);
 
-        UserResponseDto responseDto = new UserResponseDto(user);
-        return responseDto;
+        return new UserResponseDto(user);
     }
 
 
-    public User findById(Long user_id) {
-        return userRepository.findById(user_id).orElseThrow(() ->
+    @Transactional(readOnly = true)
+    public UserResponseDto findById(Long user_id) {
+        User user = userRepository.findById(user_id).orElseThrow(() ->
                 new IllegalArgumentException("해당하는 아이디의 유저가 없습니다."));
+        return new UserResponseDto(user);
     }
 
-    public List<UserResponseDto> findAll() {
+    @Transactional(readOnly = true)
+    public List<UserResponseDto> findUserList() {
         return userRepository.findAll().stream().map(UserResponseDto::new).toList();
     }
 
     @Transactional
     public UserResponseDto update(Long user_id, UserRequestDto requestDto) {
-        User user = findById(user_id);
+        User user = userRepository.findById(user_id).orElseThrow(() ->
+                new IllegalArgumentException("해당하는 아이디의 유저가 없습니다."));
         user.update(requestDto);
-        UserResponseDto userResponseDto = new UserResponseDto(user);
-        return userResponseDto;
+        return new UserResponseDto(user);
     }
 
+    @Transactional
     public String delete(Long user_id) {
-        User user = findById(user_id);
+        User user = userRepository.findById(user_id).orElseThrow(() ->
+                new IllegalArgumentException("해당하는 아이디의 유저가 없습니다."));
         userRepository.delete(user);
         return "해당 아이디의 유저를 삭제하였습니다.";
     }

@@ -1,5 +1,6 @@
 package com.sparta.jpascheduletask.dto;
 // 6단계 일정 단건 조회 시 유저 정보 중 3가지만 불러올때
+import com.sparta.jpascheduletask.entity.UserRoleEnum;
 import lombok.Getter;
 
 @Getter

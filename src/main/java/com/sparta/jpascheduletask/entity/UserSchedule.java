@@ -26,6 +26,4 @@ public class UserSchedule {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String role; //역할 : 작성자, 담당자
-
 }

@@ -46,20 +46,20 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updateDate;
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
+
     // 일정 N : 유저 M 관계 - 중간테이블 UserSchedule
     @OneToMany(mappedBy = "user")
     private List<UserSchedule> userSchedules = new ArrayList<>();
 
 
-    public User(UserRequestDto requestDto) {
-        this.username = requestDto.getUsername();
-        this.email = requestDto.getEmail();
-    }
-
-    public User(String username, String password, String email) {
+    public User(String username, String password, String email, UserRoleEnum role) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.role = role;
     }
 
     public void update(UserRequestDto requestDto){

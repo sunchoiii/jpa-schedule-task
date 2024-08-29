@@ -1,5 +1,6 @@
 package com.sparta.jpascheduletask.jwt;
 
+import com.sparta.jpascheduletask.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -26,6 +27,8 @@ public class JwtUtil {
     // JWT 데이터
     // Header KEY 값 (쿠키의 네임값)
     public static final String AUTHORIZATION_HEADER = "Authorization";
+    // 사용자 권한 값의 KEY
+    public static final String AUTHORIZATION_KEY = "auth";
     // Token 식별자(이게 토큰입니다 알려주는 것)
     public static final String BEARER_PREFIX = "Bearer ";
     // 토큰 만료시간
@@ -47,12 +50,13 @@ public class JwtUtil {
     }
 
     // JWT 토큰 생성
-    public String createToken(String username) {
+    public String createToken(String username, UserRoleEnum role) {
         Date date = new Date();
         // 데이터와 함께 암호화 후 토큰으로 만들어지고, 'Bearer '랑 햡쳐지면서 반환
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username) // 사용자 식별자값(ID)
+                        .claim(AUTHORIZATION_KEY, role) // 사용자 권한 키-밸류
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간 60분
                         .setIssuedAt(date) // 발급일
                         .signWith(key, signatureAlgorithm) // 암호화 알고리즘

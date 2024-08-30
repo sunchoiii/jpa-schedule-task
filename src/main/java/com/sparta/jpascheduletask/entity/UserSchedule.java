@@ -26,4 +26,8 @@ public class UserSchedule {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public UserSchedule(User managerUser, Schedule schedule) {
+        this.user = managerUser;
+        this.schedule = schedule;
+    }
 }

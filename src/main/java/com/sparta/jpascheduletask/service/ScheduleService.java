@@ -34,7 +34,9 @@ public class ScheduleService {
     // 일정 단건 조회 시 담당 유저들의 고유 식별자, 유저명, 이메일  포함(JPA의 지연 로딩 기능)
     @Transactional(readOnly = true)
     public ScheduleReponseDto findByIdPlusUser(Long schedule_id) {
-        Schedule schedule = findById(schedule_id);
+        Schedule schedule = scheduleRepository.findById(schedule_id).orElseThrow(() ->
+                new IllegalArgumentException("선택한 일정은 존재하지 않습니다.")
+        );
         // 이 일정과 관련된 유저스케줄 테이블
         List<UserSchedule> userSchedules = schedule.getUserSchedules();
         // 유저 정보를 담을 리스트
@@ -56,7 +58,9 @@ public class ScheduleService {
     // 일정 수정
     @Transactional
     public ScheduleReponseDto update(Long schedule_id, ScheduleRequestDto requestDto) {
-        Schedule schedule = findById(schedule_id);
+        Schedule schedule = scheduleRepository.findById(schedule_id).orElseThrow(() ->
+                new IllegalArgumentException("선택한 일정은 존재하지 않습니다.")
+        );
         schedule.update(requestDto);
         return new ScheduleReponseDto(schedule);
     }
@@ -65,18 +69,11 @@ public class ScheduleService {
     // 일정 삭제 시 댓글도 함께 삭제
     @Transactional
     public String deleteSchedule(Long schedule_id) {
-        Schedule schedule = findById(schedule_id);
+        Schedule schedule = scheduleRepository.findById(schedule_id).orElseThrow(() ->
+                new IllegalArgumentException("선택한 일정은 존재하지 않습니다.")
+        );
         scheduleRepository.delete(schedule);
         return "해당 일정이 삭제되었습니다.";
     }
 
-
-    // 일정 단건 조회 - 수정 삭제 메서드에서 사용
-    @Transactional(readOnly = true)
-    public Schedule findById (Long schedule_id) {
-        Schedule schedule = scheduleRepository.findById(schedule_id).orElseThrow(() ->
-                new IllegalArgumentException("선택한 일정은 존재하지 않습니다.")
-        );
-        return schedule;
-    }
 }
